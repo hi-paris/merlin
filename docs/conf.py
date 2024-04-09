@@ -1,13 +1,24 @@
 import sys
 import os
 import deepdespeckling
+import deepdespeckling.denoiser
+import deepdespeckling.despeckling
+import deepdespeckling.model
+import deepdespeckling.utils
+import deepdespeckling.utils.constants
+import deepdespeckling.utils.load_cosar
+import deepdespeckling.utils.utils
+import deepdespeckling.sar2sar
+import deepdespeckling.sar2sar.sar2sar_denoiser
+import deepdespeckling.merlin
+import deepdespeckling.merlin.merlin_denoiser
 
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-sys.path.insert(0, os.path.abspath('../deepdespeckling'))
+sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
