@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>deepdespeckling.utils package &mdash; deepdespeckling 0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=cb255500"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="deepdespeckling.sar2sar package" href="deepdespeckling.sar2sar.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            deepdespeckling
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.html">deepdespeckling package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.merlin.html">deepdespeckling.merlin package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.sar2sar.html">deepdespeckling.sar2sar package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">deepdespeckling.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-deepdespeckling.utils.constants">deepdespeckling.utils.constants module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-deepdespeckling.utils.load_cosar">deepdespeckling.utils.load_cosar module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.load_cosar.cos2mat"><code class="docutils literal notranslate"><span class="pre">cos2mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.load_cosar.load_tiff_image"><code class="docutils literal notranslate"><span class="pre">load_tiff_image()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-deepdespeckling.utils.utils">deepdespeckling.utils.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.compute_psnr"><code class="docutils literal notranslate"><span class="pre">compute_psnr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.create_empty_folder_in_directory"><code class="docutils literal notranslate"><span class="pre">create_empty_folder_in_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.crop_image"><code class="docutils literal notranslate"><span class="pre">crop_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.denormalize_sar_image"><code class="docutils literal notranslate"><span class="pre">denormalize_sar_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.denormalize_sar_image_sar2sar"><code class="docutils literal notranslate"><span class="pre">denormalize_sar_image_sar2sar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.get_cropping_coordinates"><code class="docutils literal notranslate"><span class="pre">get_cropping_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.get_cropping_coordinates_from_file"><code class="docutils literal notranslate"><span class="pre">get_cropping_coordinates_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.get_maximum_patch_size"><code class="docutils literal notranslate"><span class="pre">get_maximum_patch_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.get_maximum_patch_size_from_image_dimensions"><code class="docutils literal notranslate"><span class="pre">get_maximum_patch_size_from_image_dimensions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.load_sar_image"><code class="docutils literal notranslate"><span class="pre">load_sar_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.load_sar_images"><code class="docutils literal notranslate"><span class="pre">load_sar_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.normalize_sar_image"><code class="docutils literal notranslate"><span class="pre">normalize_sar_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.preprocess_and_store_sar_images"><code class="docutils literal notranslate"><span class="pre">preprocess_and_store_sar_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.preprocess_and_store_sar_images_from_coordinates"><code class="docutils literal notranslate"><span class="pre">preprocess_and_store_sar_images_from_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.preprocess_image"><code class="docutils literal notranslate"><span class="pre">preprocess_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.preprocess_sar_image_for_cropping"><code class="docutils literal notranslate"><span class="pre">preprocess_sar_image_for_cropping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.save_image_to_npy_and_png"><code class="docutils literal notranslate"><span class="pre">save_image_to_npy_and_png()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.save_image_to_png"><code class="docutils literal notranslate"><span class="pre">save_image_to_png()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deepdespeckling.utils.utils.symetrise_real_and_imaginary_parts"><code class="docutils literal notranslate"><span class="pre">symetrise_real_and_imaginary_parts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-deepdespeckling.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">deepdespeckling</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="deepdespeckling.html">deepdespeckling package</a></li>
+      <li class="breadcrumb-item active">deepdespeckling.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/deepdespeckling.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deepdespeckling-utils-package">
+<h1>deepdespeckling.utils package<a class="headerlink" href="#deepdespeckling-utils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-deepdespeckling.utils.constants">
+<span id="deepdespeckling-utils-constants-module"></span><h2>deepdespeckling.utils.constants module<a class="headerlink" href="#module-deepdespeckling.utils.constants" title="Link to this heading"></a></h2>
+</section>
+<section id="module-deepdespeckling.utils.load_cosar">
+<span id="deepdespeckling-utils-load-cosar-module"></span><h2>deepdespeckling.utils.load_cosar module<a class="headerlink" href="#module-deepdespeckling.utils.load_cosar" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.load_cosar.cos2mat">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.load_cosar.</span></span><span class="sig-name descname"><span class="pre">cos2mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_cosar_image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/load_cosar.html#cos2mat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.load_cosar.cos2mat" title="Link to this definition"></a></dt>
+<dd><p>Convert a CoSAR imge to a numpy array of size [ncolumns,nlines,2]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_to_cosar_image</strong> (<em>str</em>) -- path to the image which is a cos file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the image in a numpy array</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.load_cosar.load_tiff_image">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.load_cosar.</span></span><span class="sig-name descname"><span class="pre">load_tiff_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_tiff_image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/load_cosar.html#load_tiff_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.load_cosar.load_tiff_image" title="Link to this definition"></a></dt>
+<dd><p>Load a tiff image in a numpy array using gdal library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_to_tiff_image</strong> (<em>str</em>) -- path to a tiff image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array containing the tiff image</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(numpy array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-deepdespeckling.utils.utils">
+<span id="deepdespeckling-utils-utils-module"></span><h2>deepdespeckling.utils.utils module<a class="headerlink" href="#module-deepdespeckling.utils.utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.compute_psnr">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">compute_psnr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Shat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#compute_psnr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.compute_psnr" title="Link to this definition"></a></dt>
+<dd><p>Compute Peak Signal to Noise Ratio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Shat</strong> (<em>numpy array</em>) -- a SAR amplitude image</p></li>
+<li><p><strong>S</strong> (<em>numpy array</em>) -- a reference SAR image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>psnr value</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>res (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.create_empty_folder_in_directory">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">create_empty_folder_in_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destination_directory_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'processed_images'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#create_empty_folder_in_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.create_empty_folder_in_directory" title="Link to this definition"></a></dt>
+<dd><p>Create an empty folder in a given directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>destination_directory_path</strong> (<em>str</em>) -- path pf the directory in which an empty folder is created if it doest not exist yet</p></li>
+<li><p><strong>folder_name</strong> (<em>str</em><em>, </em><em>optional</em>) -- name of the folder to create. Defaults to &quot;processed_images&quot;.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>path of the created empty folder</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>processed_images_path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.crop_image">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">crop_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cropping_coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processed_images_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#crop_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.crop_image" title="Link to this definition"></a></dt>
+<dd><p>Crop an image using given cropping coordinates and store the result in a given folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>numpy array</em>) -- image to be cropped</p></li>
+<li><p><strong>image_path</strong> (<em>str</em>) -- path of the image</p></li>
+<li><p><strong>cropping_coordinates</strong> (<em>list</em>) -- list of coordinates of cropping, format [(x1, y1), (x2, y2)]</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) -- name of the model (stripmap, spotlight or sar2sar)</p></li>
+<li><p><strong>processed_images_path</strong> (<em>str</em>) -- path of the folder where to store the cropped image in npy format</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.denormalize_sar_image">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">denormalize_sar_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#denormalize_sar_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.denormalize_sar_image" title="Link to this definition"></a></dt>
+<dd><p>Denormalize a sar image store in  a numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>numpy array</em>) -- a sar image</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> -- raise an error if the image file is not a numpy array</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the image denormalized</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(numpy array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.denormalize_sar_image_sar2sar">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">denormalize_sar_image_sar2sar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#denormalize_sar_image_sar2sar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.denormalize_sar_image_sar2sar" title="Link to this definition"></a></dt>
+<dd><p>Denormalize a sar image store i  a numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>numpy array</em>) -- a sar image</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> -- raise an error if the image file is not a numpy array</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the image denormalized</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(numpy array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.get_cropping_coordinates">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">get_cropping_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_directory_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#get_cropping_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.get_cropping_coordinates" title="Link to this definition"></a></dt>
+<dd><p>Launch the crop tool to enable the user to select the subpart of the image to be despeckled</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>numpy aray</em>) -- full image to be cropped</p></li>
+<li><p><strong>destination_directory_path</strong> (<em>str</em>) -- path of a folder to store the results</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) -- model name to be use for despeckling. Default to &quot;spotlight&quot;</p></li>
+<li><p><strong>fixed</strong> (<em>bool</em><em>, </em><em>optional</em>) -- whether the area of selection has a fixed size of not. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.get_cropping_coordinates_from_file">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">get_cropping_coordinates_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destination_directory_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#get_cropping_coordinates_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.get_cropping_coordinates_from_file" title="Link to this definition"></a></dt>
+<dd><p>Get cropping coordinates from a file where it's stored</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>destination_directory_path</strong> (<em>str</em>) -- path of the file in which the cropping coordinates are stored</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list containing cropping coordinates</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cropping_coordinates (list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.get_maximum_patch_size">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">get_maximum_patch_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#get_maximum_patch_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.get_maximum_patch_size" title="Link to this definition"></a></dt>
+<dd><p>Get maximum manifold of a number lower than a bound</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel_size</strong> (<em>int</em>) -- the kernel size of the trained model</p></li>
+<li><p><strong>patch_bound</strong> (<em>int</em>) -- the maximum bound of the kernel size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the maximum patch size</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>maximum_patch_size (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.get_maximum_patch_size_from_image_dimensions">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">get_maximum_patch_size_from_image_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#get_maximum_patch_size_from_image_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.get_maximum_patch_size_from_image_dimensions" title="Link to this definition"></a></dt>
+<dd><p>Get the maximum patch size from the width and heigth and the kernel size of the model we use</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel_size</strong> (<em>int</em>) -- the kernel size of the trained model</p></li>
+<li><p><strong>height</strong> (<em>int</em>) -- the heigth of the image</p></li>
+<li><p><strong>width</strong> (<em>int</em>) -- the width of the image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the maximum patch size to use for despeckling</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>maximum_patch_size (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.load_sar_image">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">load_sar_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#load_sar_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.load_sar_image" title="Link to this definition"></a></dt>
+<dd><p>Load a SAR image in a numpy array, use cos2mat function if the file is a cos file,
+load_tiff_image if the file is a tiff file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image_path</strong> (<em>str</em>) -- absolute path to a SAR image (cos or npy file)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the image of dimension [ncolumns,nlines,2]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>image (numpy array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.load_sar_images">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">load_sar_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#load_sar_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.load_sar_images" title="Link to this definition"></a></dt>
+<dd><section id="description">
+<h3>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h3>
+<p>Loads files , resize them and append them into a list called data</p>
+<dl class="field-list simple">
+<dt class="field-odd">param filelist<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">type filelist<span class="colon">:</span></dt>
+<dd class="field-even"><p>a path to a folder containing the images</p>
+</dd>
+<dt class="field-odd">rtype<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of images</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.normalize_sar_image">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">normalize_sar_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#normalize_sar_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.normalize_sar_image" title="Link to this definition"></a></dt>
+<dd><p>normalize a sar image store in  a numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>numpy array</em>) -- the image to be normalized</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>normalized image</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(numpy array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.preprocess_and_store_sar_images">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">preprocess_and_store_sar_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sar_images_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processed_images_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'spotlight'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#preprocess_and_store_sar_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.preprocess_and_store_sar_images" title="Link to this definition"></a></dt>
+<dd><p>Convert coSAR images to numpy arrays and store it in a specified path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sar_images_path</strong> (<em>str</em>) -- path of a folder containing coSAR images to be converted in numpy array</p></li>
+<li><p><strong>processed_images_path</strong> (<em>str</em>) -- path of the folder where converted images are stored</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) -- model name to be use for despeckling</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.preprocess_and_store_sar_images_from_coordinates">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">preprocess_and_store_sar_images_from_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sar_images_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processed_images_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'spotlight'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#preprocess_and_store_sar_images_from_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.preprocess_and_store_sar_images_from_coordinates" title="Link to this definition"></a></dt>
+<dd><p>Convert specified areas of coSAR images to numpy arrays and store it in a specified path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sar_images_path</strong> (<em>str</em>) -- path of a folder containing coSAR images to be converted in numpy array</p></li>
+<li><p><strong>processed_images_path</strong> (<em>str</em>) -- path of the folder where converted images are stored</p></li>
+<li><p><strong>coordinates_dict</strong> (<em>dict</em>) -- dictionary containing pixel boundaries of the area to despeckle (x_start, x_end, y_start, y_end)</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) -- model name to be use for despeckling. Default to &quot;spotlight&quot;</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.preprocess_image">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">preprocess_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#preprocess_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.preprocess_image" title="Link to this definition"></a></dt>
+<dd><p>Preprocess image by limiting pixel values with a threshold</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>numpy array</em>) -- image to preprocess</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) -- pixel value threshold</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image to be saved</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>image (cv2 Image)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.preprocess_sar_image_for_cropping">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">preprocess_sar_image_for_cropping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#preprocess_sar_image_for_cropping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.preprocess_sar_image_for_cropping" title="Link to this definition"></a></dt>
+<dd><p>Preprocess image to use the cropping tool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>numpy array</em>) -- image from which we get cropping coordinates by using the cropping tool</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) -- name of the model (stripmap, spotlight or sar2sar)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image preprocessed for cropping</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>image (cv2 image)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.save_image_to_npy_and_png">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">save_image_to_npy_and_png</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#save_image_to_npy_and_png"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.save_image_to_npy_and_png" title="Link to this definition"></a></dt>
+<dd><p>Save a given image to npy and png in a given folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>numpy array</em>) -- image to save</p></li>
+<li><p><strong>save_dir</strong> (<em>str</em>) -- path to the folder where to save the image</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) -- prefix of the image file name</p></li>
+<li><p><strong>image_name</strong> (<em>str</em>) -- name of the image file</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) -- threshold of image pixel values used for png conversion</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.save_image_to_png">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">save_image_to_png</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_full_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#save_image_to_png"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.save_image_to_png" title="Link to this definition"></a></dt>
+<dd><p>Save a given image to a png file in a given folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>numpy array</em>) -- image to save</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) -- threshold of pixel values of the image to be saved in png</p></li>
+<li><p><strong>image_full_path</strong> (<em>str</em>) -- full path of the image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> -- if the image is not a numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepdespeckling.utils.utils.symetrise_real_and_imaginary_parts">
+<span class="sig-prename descclassname"><span class="pre">deepdespeckling.utils.utils.</span></span><span class="sig-name descname"><span class="pre">symetrise_real_and_imaginary_parts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real_part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imag_part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/deepdespeckling/utils/utils.html#symetrise_real_and_imaginary_parts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepdespeckling.utils.utils.symetrise_real_and_imaginary_parts" title="Link to this definition"></a></dt>
+<dd><p>Symetrise given real and imaginary parts to ensure MERLIN properties</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>real_part</strong> (<em>numpy array</em>) -- real part of the noisy image to symetrise</p></li>
+<li><p><strong>imag_part</strong> (<em>numpy array</em>) -- imaginary part of the noisy image to symetrise</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>symetrised real and imaginary parts of a noisy image</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.real(ima2), np.imag(ima2) (numpy array, numpy array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-deepdespeckling.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-deepdespeckling.utils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="deepdespeckling.sar2sar.html" class="btn btn-neutral float-left" title="deepdespeckling.sar2sar package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hadrien Mariaccia, Emanuele Delsasso.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
