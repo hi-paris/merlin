@@ -21,7 +21,7 @@ jobs:
 
       
       - name: Set up gdal 
-        run : apt-get install libgdal-dev
+        run : sudo apt-get install libgdal-dev
            
       # Runs a single command using the runners shell
       - name: Run a one-line script
