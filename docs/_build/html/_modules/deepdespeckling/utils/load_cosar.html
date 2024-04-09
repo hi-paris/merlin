@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="English" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepdespeckling.utils.load_cosar &#8212; deepdespeckling 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=12dfc556" />
+    <script src="../../../_static/documentation_options.js?v=cb255500"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for deepdespeckling.utils.load_cosar</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="cos2mat">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.utils.load_cosar.cos2mat">[docs]</a>
+<span class="k">def</span> <span class="nf">cos2mat</span><span class="p">(</span><span class="n">path_to_cosar_image</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a CoSAR imge to a numpy array of size [ncolumns,nlines,2]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_to_cosar_image (str): path to the image which is a cos file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy array : the image in a numpy array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Converting CoSAR to numpy array of size [ncolumns,nlines,2]&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fin</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_cosar_image</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="n">legx</span> <span class="o">=</span> <span class="n">path_to_cosar_image</span> <span class="o">+</span> <span class="s1">&#39;: it is a not openable file&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">legx</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;failed to call cos2mat&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="n">ibib</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">irsri</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">irs</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ias</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ibi</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">irtnb</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">itnl</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">nlig</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ncoltot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">irtnb</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">ncoltot</span> <span class="o">-</span> <span class="mi">2</span>
+    <span class="n">nlig</span> <span class="o">=</span> <span class="n">ias</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;Reading image in CoSAR format.  ncolumns=</span><span class="si">%d</span><span class="s1">  nlines=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nlig</span><span class="p">))</span>
+
+    <span class="n">firm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">())</span>
+    <span class="n">imgcxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">nlig</span><span class="p">,</span> <span class="n">ncol</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">())</span>
+
+    <span class="n">fin</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">firm</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">)</span>
+    <span class="n">firm</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">)</span>
+    <span class="n">firm</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">)</span>
+    <span class="n">firm</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">iut</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlig</span><span class="p">):</span>
+        <span class="n">firm</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">)</span>
+        <span class="n">imgligne</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">,</span> <span class="s1">&#39;&gt;h&#39;</span><span class="p">,</span> <span class="n">firm</span><span class="p">)</span>
+        <span class="n">imgcxs</span><span class="p">[</span><span class="n">iut</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">imgligne</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">imgligne</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ncoltot</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[:,:,0] contains the real part of the SLC image data&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[:,:,1] contains the imaginary part of the SLC image data&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">imgcxs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">imgcxs</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="load_tiff_image">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.utils.load_cosar.load_tiff_image">[docs]</a>
+<span class="k">def</span> <span class="nf">load_tiff_image</span><span class="p">(</span><span class="n">path_to_tiff_image</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a tiff image in a numpy array using gdal library</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_to_tiff_image (str): path to a tiff image</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (numpy array): numpy array containing the tiff image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">path_to_tiff_image</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">RasterCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">band</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">deepdespeckling</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">deepdespeckling</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Hadrien Mariaccia, Emanuele Delsasso.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
