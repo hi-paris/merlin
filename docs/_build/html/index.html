@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="modules.html" /> 
+    <link rel="next" title="deepdespeckling" href="modules.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,10 +45,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.html">deepdespeckling package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.merlin.html">deepdespeckling.merlin package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.sar2sar.html">deepdespeckling.sar2sar package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.utils.html">deepdespeckling.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">deepdespeckling</a></li>
 </ul>
 
         </div>
@@ -80,133 +77,88 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.html">deepdespeckling package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.merlin.html">deepdespeckling.merlin package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#module-deepdespeckling.merlin.merlin_denoiser">deepdespeckling.merlin.merlin_denoiser module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#module-deepdespeckling.merlin">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.sar2sar.html">deepdespeckling.sar2sar package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#module-deepdespeckling.sar2sar.sar2sar_denoiser">deepdespeckling.sar2sar.sar2sar_denoiser module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#module-deepdespeckling.sar2sar">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html">deepdespeckling.utils package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.utils.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils.constants">deepdespeckling.utils.constants module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils.load_cosar">deepdespeckling.utils.load_cosar module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils.utils">deepdespeckling.utils.utils module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">deepdespeckling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-deepdespeckling.denoiser">denoiser</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser"><code class="docutils literal notranslate"><span class="pre">Denoiser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser.denoise_image"><code class="docutils literal notranslate"><span class="pre">Denoiser.denoise_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser.denoise_image_kernel"><code class="docutils literal notranslate"><span class="pre">Denoiser.denoise_image_kernel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser.denoise_images"><code class="docutils literal notranslate"><span class="pre">Denoiser.denoise_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser.get_device"><code class="docutils literal notranslate"><span class="pre">Denoiser.get_device()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser.initialize_axis_range"><code class="docutils literal notranslate"><span class="pre">Denoiser.initialize_axis_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser.preprocess_denoised_image"><code class="docutils literal notranslate"><span class="pre">Denoiser.preprocess_denoised_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.denoiser.Denoiser.save_despeckled_images"><code class="docutils literal notranslate"><span class="pre">Denoiser.save_despeckled_images()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.html#module-deepdespeckling.denoiser">deepdespeckling.denoiser module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser"><code class="docutils literal notranslate"><span class="pre">Denoiser</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser.denoise_image"><code class="docutils literal notranslate"><span class="pre">Denoiser.denoise_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser.denoise_image_kernel"><code class="docutils literal notranslate"><span class="pre">Denoiser.denoise_image_kernel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser.denoise_images"><code class="docutils literal notranslate"><span class="pre">Denoiser.denoise_images()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser.get_device"><code class="docutils literal notranslate"><span class="pre">Denoiser.get_device()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser.initialize_axis_range"><code class="docutils literal notranslate"><span class="pre">Denoiser.initialize_axis_range()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser.preprocess_denoised_image"><code class="docutils literal notranslate"><span class="pre">Denoiser.preprocess_denoised_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.denoiser.Denoiser.save_despeckled_images"><code class="docutils literal notranslate"><span class="pre">Denoiser.save_despeckled_images()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#despeckling">despeckling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.despeckling.despeckle"><code class="docutils literal notranslate"><span class="pre">despeckle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.despeckling.despeckle_from_coordinates"><code class="docutils literal notranslate"><span class="pre">despeckle_from_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.despeckling.despeckle_from_crop"><code class="docutils literal notranslate"><span class="pre">despeckle_from_crop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.despeckling.get_denoiser"><code class="docutils literal notranslate"><span class="pre">get_denoiser()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-deepdespeckling.model">model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.model.Model.forward"><code class="docutils literal notranslate"><span class="pre">Model.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.model.Model.training"><code class="docutils literal notranslate"><span class="pre">Model.training</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.html#module-deepdespeckling.despeckling">deepdespeckling.despeckling module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.despeckling.despeckle"><code class="docutils literal notranslate"><span class="pre">despeckle()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.despeckling.despeckle_from_coordinates"><code class="docutils literal notranslate"><span class="pre">despeckle_from_coordinates()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.despeckling.despeckle_from_crop"><code class="docutils literal notranslate"><span class="pre">despeckle_from_crop()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.despeckling.get_denoiser"><code class="docutils literal notranslate"><span class="pre">get_denoiser()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.html#module-deepdespeckling.model">deepdespeckling.model module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.model.Model.forward"><code class="docutils literal notranslate"><span class="pre">Model.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.model.Model.training"><code class="docutils literal notranslate"><span class="pre">Model.training</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.html#module-deepdespeckling.test_deepdespeckling">deepdespeckling.test_deepdespeckling module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.html#deepdespeckling.test_deepdespeckling.coordinates_dictionnary"><code class="docutils literal notranslate"><span class="pre">coordinates_dictionnary</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.html#module-deepdespeckling">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.merlin.html">deepdespeckling.merlin package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.merlin.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.merlin.html#module-deepdespeckling.merlin.merlin_denoiser">deepdespeckling.merlin.merlin_denoiser module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_image"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.denoise_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_image_kernel"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.denoise_image_kernel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_images"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.denoise_images()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.init_model_weights_path"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.init_model_weights_path()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.load_model"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.load_model()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.preprocess_denoised_image"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.preprocess_denoised_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.preprocess_noisy_image"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.preprocess_noisy_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.merlin.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.save_despeckled_images"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.save_despeckled_images()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#merlin-denoiser">merlin_denoiser</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_image"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.denoise_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_image_kernel"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.denoise_image_kernel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_images"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.denoise_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.init_model_weights_path"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.init_model_weights_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.load_model"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.load_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.preprocess_denoised_image"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.preprocess_denoised_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.preprocess_noisy_image"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.preprocess_noisy_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.save_despeckled_images"><code class="docutils literal notranslate"><span class="pre">MerlinDenoiser.save_despeckled_images()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.merlin.html#module-deepdespeckling.merlin">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.sar2sar.html">deepdespeckling.sar2sar package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.sar2sar.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.sar2sar.html#module-deepdespeckling.sar2sar.sar2sar_denoiser">deepdespeckling.sar2sar.sar2sar_denoiser module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.sar2sar.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denoise_image"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denoise_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denoise_image_kernel"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denoise_image_kernel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denoise_images"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denoise_images()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denormalize_sar_image"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denormalize_sar_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.load_model"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.load_model()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="deepdespeckling.sar2sar.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.save_despeckled_images"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.save_despeckled_images()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#sar2sar-denoiser">sar2sar_denoiser</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denoise_image"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denoise_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denoise_image_kernel"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denoise_image_kernel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denoise_images"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denoise_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.denormalize_sar_image"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.denormalize_sar_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.load_model"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.load_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules.html#deepdespeckling.sar2sar.sar2sar_denoiser.Sar2SarDenoiser.save_despeckled_images"><code class="docutils literal notranslate"><span class="pre">Sar2SarDenoiser.save_despeckled_images()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.sar2sar.html#module-deepdespeckling.sar2sar">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-deepdespeckling.utils.utils">utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.compute_psnr"><code class="docutils literal notranslate"><span class="pre">compute_psnr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.create_empty_folder_in_directory"><code class="docutils literal notranslate"><span class="pre">create_empty_folder_in_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.crop_image"><code class="docutils literal notranslate"><span class="pre">crop_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.denormalize_sar_image"><code class="docutils literal notranslate"><span class="pre">denormalize_sar_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.denormalize_sar_image_sar2sar"><code class="docutils literal notranslate"><span class="pre">denormalize_sar_image_sar2sar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.get_cropping_coordinates"><code class="docutils literal notranslate"><span class="pre">get_cropping_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.get_cropping_coordinates_from_file"><code class="docutils literal notranslate"><span class="pre">get_cropping_coordinates_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.get_maximum_patch_size"><code class="docutils literal notranslate"><span class="pre">get_maximum_patch_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.get_maximum_patch_size_from_image_dimensions"><code class="docutils literal notranslate"><span class="pre">get_maximum_patch_size_from_image_dimensions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.load_sar_image"><code class="docutils literal notranslate"><span class="pre">load_sar_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.load_sar_images"><code class="docutils literal notranslate"><span class="pre">load_sar_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.normalize_sar_image"><code class="docutils literal notranslate"><span class="pre">normalize_sar_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.preprocess_and_store_sar_images"><code class="docutils literal notranslate"><span class="pre">preprocess_and_store_sar_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.preprocess_and_store_sar_images_from_coordinates"><code class="docutils literal notranslate"><span class="pre">preprocess_and_store_sar_images_from_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.preprocess_image"><code class="docutils literal notranslate"><span class="pre">preprocess_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.preprocess_sar_image_for_cropping"><code class="docutils literal notranslate"><span class="pre">preprocess_sar_image_for_cropping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.save_image_to_npy_and_png"><code class="docutils literal notranslate"><span class="pre">save_image_to_npy_and_png()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.save_image_to_png"><code class="docutils literal notranslate"><span class="pre">save_image_to_png()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.utils.symetrise_real_and_imaginary_parts"><code class="docutils literal notranslate"><span class="pre">symetrise_real_and_imaginary_parts()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="deepdespeckling.utils.html">deepdespeckling.utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.utils.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils.constants">deepdespeckling.utils.constants module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils.load_cosar">deepdespeckling.utils.load_cosar module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.load_cosar.cos2mat"><code class="docutils literal notranslate"><span class="pre">cos2mat()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.load_cosar.load_tiff_image"><code class="docutils literal notranslate"><span class="pre">load_tiff_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#load-cosar">load_cosar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.load_cosar.cos2mat"><code class="docutils literal notranslate"><span class="pre">cos2mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#deepdespeckling.utils.load_cosar.load_tiff_image"><code class="docutils literal notranslate"><span class="pre">load_tiff_image()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils.utils">deepdespeckling.utils.utils module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.compute_psnr"><code class="docutils literal notranslate"><span class="pre">compute_psnr()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.create_empty_folder_in_directory"><code class="docutils literal notranslate"><span class="pre">create_empty_folder_in_directory()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.crop_image"><code class="docutils literal notranslate"><span class="pre">crop_image()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.denormalize_sar_image"><code class="docutils literal notranslate"><span class="pre">denormalize_sar_image()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.denormalize_sar_image_sar2sar"><code class="docutils literal notranslate"><span class="pre">denormalize_sar_image_sar2sar()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.get_cropping_coordinates"><code class="docutils literal notranslate"><span class="pre">get_cropping_coordinates()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.get_cropping_coordinates_from_file"><code class="docutils literal notranslate"><span class="pre">get_cropping_coordinates_from_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.get_maximum_patch_size"><code class="docutils literal notranslate"><span class="pre">get_maximum_patch_size()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.get_maximum_patch_size_from_image_dimensions"><code class="docutils literal notranslate"><span class="pre">get_maximum_patch_size_from_image_dimensions()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.load_sar_image"><code class="docutils literal notranslate"><span class="pre">load_sar_image()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.load_sar_images"><code class="docutils literal notranslate"><span class="pre">load_sar_images()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.normalize_sar_image"><code class="docutils literal notranslate"><span class="pre">normalize_sar_image()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.preprocess_and_store_sar_images"><code class="docutils literal notranslate"><span class="pre">preprocess_and_store_sar_images()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.preprocess_and_store_sar_images_from_coordinates"><code class="docutils literal notranslate"><span class="pre">preprocess_and_store_sar_images_from_coordinates()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.preprocess_image"><code class="docutils literal notranslate"><span class="pre">preprocess_image()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.preprocess_sar_image_for_cropping"><code class="docutils literal notranslate"><span class="pre">preprocess_sar_image_for_cropping()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.save_image_to_npy_and_png"><code class="docutils literal notranslate"><span class="pre">save_image_to_npy_and_png()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.save_image_to_png"><code class="docutils literal notranslate"><span class="pre">save_image_to_png()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="deepdespeckling.utils.html#deepdespeckling.utils.utils.symetrise_real_and_imaginary_parts"><code class="docutils literal notranslate"><span class="pre">symetrise_real_and_imaginary_parts()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="deepdespeckling.utils.html#module-deepdespeckling.utils">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -225,7 +177,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="modules.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="deepdespeckling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
