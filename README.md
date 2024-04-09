@@ -34,6 +34,8 @@ In order to get the right model, the `model_name` has to be specified when build
 This `model_name` can either be :
 - `"spotlight"` for SAR images retrieved with spotlight mode 
 - `"stripmap"` for SAR images retrieved with stripmap mode
+- `"Sentinel-TOPS"` for SAR images retrieved with TOPS mode
+
 
 During the preprocessing steps of the noisy image for MERLIN, the real and the imaginary parts are <strong>"symetrised"</strong> (to match the theoretical assumptions of MERLIN). To skip this step, you can set the `symetrise` parameter to `False`
 
@@ -47,7 +49,7 @@ from deepdespeckling.merlin.merlin_denoiser import MerlinDenoiser
 
 # Path to one image (cos or npy file)
 image_path="path/to/cosar/image"
-# Model name, can be "spotlight" or "stripmap"
+# Model name, can be "spotlight", "stripmap" or "Sentinel-TOPS"
 model_name = "spotlight"
 symetrise = True
 
