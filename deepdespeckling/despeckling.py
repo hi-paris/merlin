@@ -13,7 +13,7 @@ from deepdespeckling.utils.utils import (crop_image, get_cropping_coordinates, l
 logging.basicConfig(level=logging.INFO)
 
 
-def get_denoiser(model_name: str, symetrise: bool = True) -> Denoiser:
+def _get_denoiser(model_name: str, symetrise: bool = True) -> Denoiser:
     """Get the right denoiser object from the model name
 
     Args:
@@ -24,7 +24,7 @@ def get_denoiser(model_name: str, symetrise: bool = True) -> Denoiser:
     Returns:
         denoiser (Denoiser): the right denoiser, Sar2SarDenoiser or MerlinDenoiser
     """
-    if model_name in ["spotlight", "stripmap"]:
+    if model_name in ["spotlight", "stripmap", "Sentinel_TOPS"]:
         denoiser = MerlinDenoiser(model_name=model_name, symetrise=symetrise)
     elif model_name == "sar2sar":
         denoiser = Sar2SarDenoiser()
@@ -41,7 +41,7 @@ def despeckle(sar_images_path: str, destination_directory_path: str, model_name:
     Args:
         sar_images_path (str): path of sar images
         destination_directory_path (str): path of folder in which results will be stored
-        model_name (str): model name, either "spotlight" or "stripmap" to select MERLIN model on the 
+        model_name (str): model name, either "spotlight", "stripmap" or "Sentinel_TOPS" to select MERLIN model on the 
             right cosar image format or "sar2sar" for SAR2SAR model. Default to "spotlight"
         patch_size (int): patch size. Defaults to constant PATCH_SIZE.
         stride_size (int): stride size. Defaults to constant STRIDE_SIZE.
@@ -60,7 +60,7 @@ def despeckle(sar_images_path: str, destination_directory_path: str, model_name:
     logging.info(
         f"Starting inference.. Collecting data from {sar_images_path} and storing test results in {destination_directory_path}")
 
-    denoiser = get_denoiser(model_name=model_name, symetrise=symetrise)
+    denoiser = _get_denoiser(model_name=model_name, symetrise=symetrise)
     denoiser.denoise_images(images_to_denoise_path=processed_images_path, save_dir=destination_directory_path,
                             patch_size=patch_size, stride_size=stride_size)
 
@@ -73,7 +73,7 @@ def despeckle_from_coordinates(sar_images_path: str, coordinates_dict: dict, des
         sar_images_path (str): path of sar images
         coordinates_dict (dict): dictionary containing pixel boundaries of the area to despeckle (x_start, x_end, y_start, y_end)
         destination_directory_path (str): path of folder in which results will be stored
-        model_name (str): model name, either "spotlight" or "stripmap" to select MERLIN model on the 
+        model_name (str): model name, either "spotlight", "stripmap" or "Sentinel_TOPS" to select MERLIN model on the 
             right cosar image format or "sar2sar" for SAR2SAR model. Default to "spotlight"
         patch_size (int): patch size. Defaults to constant PATCH_SIZE.
         stride_size (int): stride size. Defaults to constant STRIDE_SIZE.
@@ -92,7 +92,7 @@ def despeckle_from_coordinates(sar_images_path: str, coordinates_dict: dict, des
     logging.info(
         f"Starting inference.. Collecting data from {sar_images_path} and storing test results in {destination_directory_path}")
 
-    denoiser = get_denoiser(model_name=model_name, symetrise=symetrise)
+    denoiser = _get_denoiser(model_name=model_name, symetrise=symetrise)
     denoiser.denoise_images(images_to_denoise_path=processed_images_path, save_dir=destination_directory_path,
                             patch_size=patch_size, stride_size=stride_size)
 
@@ -106,7 +106,7 @@ def despeckle_from_crop(sar_images_path: str, destination_directory_path: str, m
         destination_directory_path (str): path of folder in which results will be stored
         patch_size (int): patch size. Defaults to constant PATCH_SIZE.
         stride_size (int): stride size. Defaults to constant STRIDE_SIZE.
-        model_name (str): model name, either "spotlight" or "stripmap" to select MERLIN model on the 
+        model_name (str): model name, either "spotlight", "stripmap" or "Sentinel_TOPS" to select MERLIN model on the 
             right cosar image format or "sar2sar" for SAR2SAR model. Default to "spotlight"
         fixed (bool) : If True, crop size is limited to 256*256. Defaults to True
         symetrise (bool) : if using spotlight or stripmap model, if True, will symetrise the real and 
@@ -119,7 +119,8 @@ def despeckle_from_crop(sar_images_path: str, destination_directory_path: str, m
     processed_images_path = create_empty_folder_in_directory(destination_directory_path=destination_directory_path,
                                                              folder_name="processed_images")
 
-    ext = "cos" if model_name in ["spotlight", "stripmap"] else "tiff"
+    ext = "cos" if model_name in ["spotlight",
+                                  "stripmap", "Sentinel_TOPS"] else "tiff"
     images_paths = glob(os.path.join(sar_images_path, f"*.{ext}")) + \
         glob(os.path.join(sar_images_path, "*.npy"))
 
@@ -139,6 +140,6 @@ def despeckle_from_crop(sar_images_path: str, destination_directory_path: str, m
     logging.info(
         f"Starting inference.. Collecting data from {sar_images_path} and storing results in {destination_directory_path}")
 
-    denoiser = get_denoiser(model_name=model_name, symetrise=symetrise)
+    denoiser = _get_denoiser(model_name=model_name, symetrise=symetrise)
     denoiser.denoise_images(images_to_denoise_path=processed_images_path, save_dir=destination_directory_path,
                             patch_size=patch_size, stride_size=stride_size)
