@@ -23,7 +23,7 @@ class MerlinDenoiser(Denoiser):
         """Initialize MerlinDenoiser class
 
         Args:
-            model_name (str): name to be used, can be "spotlight" or "stripmap"
+            model_name (str): name to be used, can be "spotlight", "stripmap" or "sentinel_tops"
         """
         super().__init__(**params)
         self.model_name = model_name
@@ -42,6 +42,9 @@ class MerlinDenoiser(Denoiser):
         elif self.model_name == "stripmap":
             model_weights_path = os.path.join(
                 current_dir, "saved_models/stripmap.pth")
+        elif self.model_name == "sentinel_tops":
+            model_weights_path = os.path.join(
+                current_dir, "saved_models/sentinel_tops.pth")
         else:
             raise ValueError(
                 "The model name doesn't refer to an existing model ")
