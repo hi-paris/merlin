@@ -5,5 +5,5 @@ destination_directory = "/Users/hadrienmariaccia/Documents/Projects/deepdespeckl
 coordinates_dictionnary = {'x_start': 0,
                            'y_start': 0, 'x_end': 400, 'y_end': 400}
 
-despeckle(image_path, destination_directory,
-          model_name="sar2sar")
+"""despeckle(image_path, destination_directory,
+          model_name="sar2sar")"""
