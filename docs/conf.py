@@ -1,5 +1,6 @@
 import sys
 import os
+import deepdespeckling
 
 # Configuration file for the Sphinx documentation builder.
 #
