@@ -32,6 +32,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install ghp-import sphinx sphinx_rtd_theme -e .
 
+      - name: Install gdal dependencies 
+        run : pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version`
+
       - name: Build HTML
         run: | 
           cd docs/
