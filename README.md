@@ -2,10 +2,10 @@
 
 Speckle noise seriously limits the interpretability of synthetic aperture radar (SAR) images. This package provides <strong>deep learning based despeckling methods</strong> to denoise SAR images. 
 
-<strong>deepdespeckling</strong> gives access to two differents methods: 
+<strong>deepdespeckling</strong> gives access to two different despeckling methods: 
 
-* [MERLIN](https://arxiv.org/pdf/2110.13148.pdf) (inference and training)
-* [SAR2SAR](https://arxiv.org/pdf/2006.15037.pdf) (inference only)
+* [MERLIN](https://arxiv.org/pdf/2110.13148.pdf) 
+* [SAR2SAR](https://arxiv.org/pdf/2006.15037.pdf) 
 
 
 [![PyPI version](https://badge.fury.io/py/deepdespeckling.svg)](https://badge.fury.io/py/deepdespeckling)
@@ -178,11 +178,7 @@ despeckle(image_path, destination_directory, model_name="sar2sar")
 
 ## Documentation
 
-To read a clean documentation of the package, you can generate it using sphinx files in the `docs` folder
-
-1. `cd docs`
-2. `make html `
-3. open `build/index.html`
+The documentation of the package is [available here](https://hi-paris.github.io/deepdespeckling/)
 
 ## Authors
 
