@@ -40,6 +40,6 @@ setup(
     name='deepdespeckling',
     packages=find_packages(include=['deepdespeckling', 'deepdespeckling.*']),
     url='https://github.com/hi-paris/deepdespeckling',
-    version='0.6',
+    version='0.7',
     zip_safe=False,
 )
