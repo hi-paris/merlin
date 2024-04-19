@@ -49,12 +49,14 @@ from deepdespeckling.utils.constants import PATCH_SIZE, STRIDE_SIZE
 from deepdespeckling.merlin.merlin_denoiser import MerlinDenoiser
 
 # Path to one image (cos or npy file)
-image_path="path/to/cosar/image"
+image_path="path/to/image"
 # Model name, can be "spotlight", "stripmap" or "Sentinel-TOPS"
 model_name = "spotlight"
 symetrise = True
 
 image = cos2mat(image_path).astype(np.float32)
+# As an alternative, you can load your image by being sure to put in the following format:
+# The shape of image is [img_height,img_width,2], where image[:,:,0] contains the real part and image[:,:,1] contains the imaginary part of the SLC SAR image.
 
 denoiser = MerlinDenoiser(model_name=model_name, symetrise=symetrise)
 denoised_image = denoiser.denoise_image(image, patch_size=PATCH_SIZE, stride_size=STRIDE_SIZE)
@@ -74,7 +76,7 @@ For each of this method, you can choose between 3 different functions to despeck
 from deepdespeckling.despeckling import despeckle
 
 # Path to a folder of several images (cos or npy files)
-image_path="path/to/cosar/image"
+image_path="path/to/image"
 # Folder where results are stored
 destination_directory="path/where/to/save/results"
 
@@ -141,11 +143,9 @@ from deepdespeckling.utils.load_cosar import cos2mat
 from deepdespeckling.utils.constants import PATCH_SIZE, STRIDE_SIZE
 from deepdespeckling.sar2sar.sar2sar_denoiser import Sar2SarDenoiser
 
-# Path to one image (tiff or npy file)
-image_path="path/to/cosar/image"
-
-# Works exactly the same as with MERLIN
-image = cos2mat(image_path).astype(np.float32)
+# Load you image
+image = ..
+# NB: image must be in AMPLITUDE format and have the following shape: [img_height,img_width]
 
 # Denoise the image with SAR2SAR
 denoiser = Sar2SarDenoiser()
@@ -170,7 +170,7 @@ For example, to despeckle a set of fullsize images:
 from deepdespeckling.despeckling import despeckle
 
 # Path to a folder of several images (tiff or npy files)
-image_path="path/to/cosar/image"
+image_path="path/to/image"
 # Folder where results are stored
 destination_directory="path/where/to/save/results"
 
