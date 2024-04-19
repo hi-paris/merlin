@@ -1,6 +1,7 @@
 from glob import glob
 import logging
 from pathlib import Path
+from typing import Tuple
 import torch
 import os
 import numpy as np
@@ -8,7 +9,7 @@ from tqdm import tqdm
 
 from deepdespeckling.denoiser import Denoiser
 from deepdespeckling.model import Model
-from deepdespeckling.utils.constants import M, m
+from deepdespeckling.utils.constants import M, m, M_s, m_s
 from deepdespeckling.utils.utils import (denormalize_sar_image, load_sar_image, save_image_to_npy_and_png,
                                          symetrise_real_and_imaginary_parts, create_empty_folder_in_directory)
 
@@ -28,6 +29,7 @@ class MerlinDenoiser(Denoiser):
         super().__init__(**params)
         self.model_name = model_name
         self.symetrise = symetrise
+        self.M, self.m = self.init_min_max_norm_values()
         self.weights_path = self.init_model_weights_path()
 
     def init_model_weights_path(self) -> str:
@@ -50,6 +52,16 @@ class MerlinDenoiser(Denoiser):
                 "The model name doesn't refer to an existing model ")
 
         return model_weights_path
+
+    def init_min_max_norm_values(self) -> Tuple[float, float]:
+        """Initialize min and max values for normalization depending on model name
+
+        Returns:
+            Tuple[float, float]: Max and min values for SAR image normalization
+        """
+        if self.model_name == "Sentinel-TOPS":
+            return M_s, m_s
+        return M, m
 
     def load_model(self, patch_size: int) -> Model:
         """Load model with given weights 
@@ -213,9 +225,9 @@ class MerlinDenoiser(Denoiser):
                     imag_to_denoise, device=self.device, dtype=torch.float32)
 
                 real_to_denoise = (torch.log(torch.square(
-                    real_to_denoise)+1e-3)-2*m)/(2*(M-m))
+                    real_to_denoise)+1e-3)-2*self.m)/(2*(self.M-self.m))
                 imag_to_denoise = (torch.log(torch.square(
-                    imag_to_denoise)+1e-3)-2*m)/(2*(M-m))
+                    imag_to_denoise)+1e-3)-2*self.m)/(2*(self.M-self.m))
 
                 denoised_image_real_part = self.denoise_image_kernel(
                     real_to_denoise, denoised_image_real_part, x, y, patch_size, model)
