@@ -234,7 +234,7 @@ def symetrise_real_and_imaginary_parts(real_part: np.array, imag_part: np.array)
     shift_az_2 = int(
         round(-(d1 - 1 - p.shape[0]) / 2)) % p.shape[0] + int(p.shape[0] / 2)
     p2_2 = np.roll(p, shift_az_2)
-    window = signal.gaussian(p.shape[0], std=0.2 * p.shape[0])
+    window = signal.windows.gaussian(p.shape[0], std=0.2 * p.shape[0])
     test_1 = np.sum(window * p2_1)
     test_2 = np.sum(window * p2_2)
     # make sure the spectrum is symetrized and zeo-Doppler centered
@@ -260,7 +260,7 @@ def symetrise_real_and_imaginary_parts(real_part: np.array, imag_part: np.array)
     shift_range_2 = int(
         round(-(d2 - 1 - q.shape[0]) / 2)) % q.shape[0] + int(q.shape[0] / 2)
     q2_2 = np.roll(q, shift_range_2)
-    window_r = signal.gaussian(q.shape[0], std=0.2 * q.shape[0])
+    window_r = signal.windows.gaussian(q.shape[0], std=0.2 * q.shape[0])
     test_1 = np.sum(window_r * q2_1)
     test_2 = np.sum(window_r * q2_2)
     if test_1 >= test_2:
