@@ -10,6 +10,7 @@ Speckle noise seriously limits the interpretability of synthetic aperture radar 
 
 [![PyPI version](https://badge.fury.io/py/deepdespeckling.svg)](https://badge.fury.io/py/deepdespeckling)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Inline docs](icons/doc.svg)](https://inch-ci.org/github/dwyl/hapi-auth-jwt2)
 
 ## Installation
 
@@ -149,7 +150,7 @@ image = cos2mat(image_path).astype(np.float32)
 # Denoise the image with SAR2SAR
 denoiser = Sar2SarDenoiser()
 denoised_image = denoiser.denoise_image(
-                image, model_weights_path, patch_size=PATCH_SIZE, stride_size=STRIDE_SIZE)
+                image, patch_size=PATCH_SIZE, stride_size=STRIDE_SIZE)
 ```
 
 - Example of result with SAR2SAR :
