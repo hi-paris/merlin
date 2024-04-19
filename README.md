@@ -10,7 +10,7 @@ Speckle noise seriously limits the interpretability of synthetic aperture radar 
 
 [![PyPI version](https://badge.fury.io/py/deepdespeckling.svg)](https://badge.fury.io/py/deepdespeckling)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Inline docs](icons/doc.svg)](https://inch-ci.org/github/dwyl/hapi-auth-jwt2)
+[![Inline docs](icons/doc.svg)](https://hi-paris.github.io/deepdespeckling/)
 
 ## Installation
 
