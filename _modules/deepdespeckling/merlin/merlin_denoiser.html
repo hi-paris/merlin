@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>deepdespeckling.merlin.merlin_denoiser &mdash; deepdespeckling 0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=b489f392"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            deepdespeckling
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">deepdespeckling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">deepdespeckling</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">deepdespeckling.merlin.merlin_denoiser</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for deepdespeckling.merlin.merlin_denoiser</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">deepdespeckling.denoiser</span> <span class="kn">import</span> <span class="n">Denoiser</span>
+<span class="kn">from</span> <span class="nn">deepdespeckling.model</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">deepdespeckling.utils.constants</span> <span class="kn">import</span> <span class="n">M</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">M_s</span><span class="p">,</span> <span class="n">m_s</span>
+<span class="kn">from</span> <span class="nn">deepdespeckling.utils.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">denormalize_sar_image</span><span class="p">,</span> <span class="n">load_sar_image</span><span class="p">,</span> <span class="n">save_image_to_npy_and_png</span><span class="p">,</span>
+                                         <span class="n">symetrise_real_and_imaginary_parts</span><span class="p">,</span> <span class="n">create_empty_folder_in_directory</span><span class="p">)</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MerlinDenoiser">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser">[docs]</a>
+<span class="k">class</span> <span class="nc">MerlinDenoiser</span><span class="p">(</span><span class="n">Denoiser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to share parameters beyond denoising functions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">symetrise</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize MerlinDenoiser class</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_name (str): name to be used, can be &quot;spotlight&quot;, &quot;stripmap&quot; or &quot;Sentinel-TOPS&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symetrise</span> <span class="o">=</span> <span class="n">symetrise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_min_max_norm_values</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_model_weights_path</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MerlinDenoiser.init_model_weights_path">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.init_model_weights_path">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_model_weights_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get model weights path from model name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            model_weights_path (str): the path of the weights of the specified model</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;spotlight&quot;</span><span class="p">:</span>
+            <span class="n">model_weights_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">current_dir</span><span class="p">,</span> <span class="s2">&quot;saved_models/spotlight.pth&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;stripmap&quot;</span><span class="p">:</span>
+            <span class="n">model_weights_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">current_dir</span><span class="p">,</span> <span class="s2">&quot;saved_models/stripmap.pth&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;Sentinel-TOPS&quot;</span><span class="p">:</span>
+            <span class="n">model_weights_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">current_dir</span><span class="p">,</span> <span class="s2">&quot;saved_models/sentinel_tops.pth&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The model name doesn&#39;t refer to an existing model &quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">model_weights_path</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.init_min_max_norm_values">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.init_min_max_norm_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_min_max_norm_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize min and max values for normalization depending on model name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[float, float]: Max and min values for SAR image normalization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;Sentinel-TOPS&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">M_s</span><span class="p">,</span> <span class="n">m_s</span>
+        <span class="k">return</span> <span class="n">M</span><span class="p">,</span> <span class="n">m</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.load_model">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.load_model">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load model with given weights </span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            weights_path (str): path to weights  </span>
+<span class="sd">            patch_size (int): patch size</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            model (Model): model loaded with stored weights</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
+                      <span class="n">height</span><span class="o">=</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">patch_size</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights_path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.save_despeckled_images">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.save_despeckled_images">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_despeckled_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">despeckled_images</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">image_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save full, real and imaginary part of noisy and denoised image stored in a dictionary in png to a given folder</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            despeckled_images (dict): dictionary containing full, real and imaginary parts of noisy and denoised image</span>
+<span class="sd">            image_name (str): name of the image</span>
+<span class="sd">            save_dir (str): path to the folder where to save the png images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+            <span class="n">despeckled_images</span><span class="p">[</span><span class="s2">&quot;noisy&quot;</span><span class="p">][</span><span class="s2">&quot;full&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">despeckled_images</span><span class="p">[</span><span class="s2">&quot;noisy&quot;</span><span class="p">][</span><span class="s2">&quot;full&quot;</span><span class="p">])</span>
+        <span class="n">image_name</span> <span class="o">=</span> <span class="n">image_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">despeckled_images</span><span class="p">:</span>
+            <span class="n">create_empty_folder_in_directory</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key2</span> <span class="ow">in</span> <span class="n">despeckled_images</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">save_image_to_npy_and_png</span><span class="p">(</span>
+                    <span class="n">despeckled_images</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key2</span><span class="p">],</span> <span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">key2</span><span class="si">}</span><span class="s2">_&quot;</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.denoise_image_kernel">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_image_kernel">[docs]</a>
+    <span class="k">def</span> <span class="nf">denoise_image_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noisy_image</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">denoised_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                             <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">normalisation_kernel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Denoise a subpart of a given symetrised noisy image delimited by x, y and patch_size using a given model</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            noisy_image (torch tensor): symetrised noisy image to denoise</span>
+<span class="sd">            denoised_image (numpy array): symetrised partially denoised image</span>
+<span class="sd">            x (int): x coordinate of current kernel to denoise</span>
+<span class="sd">            y (int): y coordinate of current kernel to denoise</span>
+<span class="sd">            patch_size (int): patch size</span>
+<span class="sd">            model (Model): trained model with loaded weights </span>
+<span class="sd">            normalisation_kernel (bool, optional): Determine if. Defaults to False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            denoised_image (numpy array): image denoised in the given coordinates and the ones already iterated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">normalisation_kernel</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">!=</span> <span class="s1">&#39;cpu&#39;</span><span class="p">:</span>
+                <span class="n">tmp_clean_image</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span>
+                    <span class="n">noisy_image</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tmp_clean_image</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span>
+                    <span class="n">noisy_image</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">tmp_clean_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">tmp_clean_image</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">denoised_image</span><span class="p">[:,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="n">y</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">denoised_image</span><span class="p">[:,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span>
+                                                                                      <span class="n">y</span><span class="p">:</span><span class="n">y</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span>
+                                                                                      <span class="p">:]</span> <span class="o">+</span> <span class="n">tmp_clean_image</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">denoised_image</span><span class="p">[:,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="n">y</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">denoised_image</span><span class="p">[:,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span>
+                                                                                      <span class="n">y</span><span class="p">:</span><span class="n">y</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span>
+                                                                                      <span class="p">:]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">denoised_image</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.preprocess_noisy_image">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.preprocess_noisy_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">preprocess_noisy_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noisy_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;preprocess a given noisy image and generates its real and imaginary parts</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            noisy_image (numpy array): noisy image</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            noisy_image, noisy_image_real_part, noisy_image_imaginary_part (numpy array, numpy array, numpy array): </span>
+<span class="sd">            preprocessed noisy image, real part of noisy image, imaginary part of noisy image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">noisy_image_real_part</span> <span class="o">=</span> <span class="p">(</span><span class="n">noisy_image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">noisy_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">noisy_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                                  <span class="n">noisy_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">noisy_image_imaginary_part</span> <span class="o">=</span> <span class="p">(</span><span class="n">noisy_image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">noisy_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">noisy_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                                       <span class="n">noisy_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">noisy_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noisy_image_real_part</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">noisy_image_imaginary_part</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">noisy_image</span><span class="p">,</span> <span class="n">noisy_image_real_part</span><span class="p">,</span> <span class="n">noisy_image_imaginary_part</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.preprocess_denoised_image">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.preprocess_denoised_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">preprocess_denoised_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">denoised_image_real_part</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">denoised_image_imaginary_part</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">count_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preprocess given denoised real and imaginary parts of an image, and build the full denoised image</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            denoised_image_real_part (numpy array): real part of a denoised image</span>
+<span class="sd">            denoised_image_imaginary_part (numpy array): imaginary part of a denoised image</span>
+<span class="sd">            count_image (numpy array): normalisation image used for denormalisation</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            denoised_image, denoised_image_real_part, denoised_image_imaginary_part (numpy array, numpy array, numpy array): </span>
+<span class="sd">            processed denoised full image, processed denoised image real part, processed denoised image imaginary part</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">denoised_image_real_part</span> <span class="o">=</span> <span class="n">denormalize_sar_image</span><span class="p">(</span>
+            <span class="n">denoised_image_real_part</span> <span class="o">/</span> <span class="n">count_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">denoised_image_imaginary_part</span> <span class="o">=</span> <span class="n">denormalize_sar_image</span><span class="p">(</span>
+            <span class="n">denoised_image_imaginary_part</span> <span class="o">/</span> <span class="n">count_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="c1"># combine the two estimation</span>
+        <span class="n">output_clean_image</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
+            <span class="n">denoised_image_real_part</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">denoised_image_imaginary_part</span><span class="p">))</span>
+
+        <span class="n">denoised_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">output_clean_image</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">denoised_image</span><span class="p">,</span> <span class="n">denoised_image_real_part</span><span class="p">,</span> <span class="n">denoised_image_imaginary_part</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.denoise_image">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">denoise_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noisy_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stride_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preprocess and denoise a coSAR image using given model weights</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            noisy_image (numpy array): numpy array containing the noisy image to despeckle </span>
+<span class="sd">            patch_size (int): size of the patch of the convolution</span>
+<span class="sd">            stride_size (int): number of pixels between one convolution to the next</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            despeckled_image (dict): noisy and denoised images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">noisy_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">noisy_image</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">noisy_image</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">noisy_image</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Pad the image</span>
+        <span class="n">image_height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">noisy_image</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">image_width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">noisy_image</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">noisy_image</span><span class="p">,</span> <span class="n">noisy_image_real_part</span><span class="p">,</span> <span class="n">noisy_image_imaginary_part</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_noisy_image</span><span class="p">(</span>
+            <span class="n">noisy_image</span><span class="p">)</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">patch_size</span><span class="o">=</span><span class="n">patch_size</span><span class="p">)</span>
+
+        <span class="n">count_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">noisy_image_real_part</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">denoised_image_real_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">noisy_image_real_part</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">denoised_image_imaginary_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">noisy_image_real_part</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">x_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_axis_range</span><span class="p">(</span>
+            <span class="n">image_height</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">stride_size</span><span class="p">)</span>
+        <span class="n">y_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_axis_range</span><span class="p">(</span>
+            <span class="n">image_width</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">stride_size</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">x_range</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">y_range</span><span class="p">:</span>
+                <span class="n">real_to_denoise</span> <span class="o">=</span> <span class="n">noisy_image_real_part</span><span class="p">[:,</span>
+                                                        <span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="n">y</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">imag_to_denoise</span> <span class="o">=</span> <span class="n">noisy_image_imaginary_part</span><span class="p">[:,</span>
+                                                             <span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="n">y</span> <span class="o">+</span> <span class="n">patch_size</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symetrise</span><span class="p">:</span>
+                    <span class="n">real_to_denoise</span><span class="p">,</span> <span class="n">imag_to_denoise</span> <span class="o">=</span> <span class="n">symetrise_real_and_imaginary_parts</span><span class="p">(</span>
+                        <span class="n">real_to_denoise</span><span class="p">,</span> <span class="n">imag_to_denoise</span><span class="p">)</span>
+
+                <span class="n">real_to_denoise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                    <span class="n">real_to_denoise</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="n">imag_to_denoise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                    <span class="n">imag_to_denoise</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+                <span class="n">real_to_denoise</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
+                    <span class="n">real_to_denoise</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-3</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+                <span class="n">imag_to_denoise</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
+                    <span class="n">imag_to_denoise</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-3</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+
+                <span class="n">denoised_image_real_part</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">denoise_image_kernel</span><span class="p">(</span>
+                    <span class="n">real_to_denoise</span><span class="p">,</span> <span class="n">denoised_image_real_part</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">denoised_image_imaginary_part</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">denoise_image_kernel</span><span class="p">(</span>
+                    <span class="n">imag_to_denoise</span><span class="p">,</span> <span class="n">denoised_image_imaginary_part</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">count_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">denoise_image_kernel</span><span class="p">(</span>
+                    <span class="n">imag_to_denoise</span><span class="p">,</span> <span class="n">count_image</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">normalisation_kernel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">denoised_image</span><span class="p">,</span> <span class="n">denoised_image_real_part</span><span class="p">,</span> <span class="n">denoised_image_imaginary_part</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_denoised_image</span><span class="p">(</span>
+            <span class="n">denoised_image_real_part</span><span class="p">,</span> <span class="n">denoised_image_imaginary_part</span><span class="p">,</span> <span class="n">count_image</span><span class="p">)</span>
+
+        <span class="n">despeckled_image</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;noisy&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;full&quot;</span><span class="p">:</span> <span class="n">noisy_image</span><span class="p">,</span>
+                                      <span class="s2">&quot;real&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">noisy_image_real_part</span><span class="p">),</span>
+                                      <span class="s2">&quot;imaginary&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">noisy_image_imaginary_part</span><span class="p">)</span>
+                                      <span class="p">},</span>
+                            <span class="s2">&quot;denoised&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;full&quot;</span><span class="p">:</span> <span class="n">denoised_image</span><span class="p">,</span>
+                                         <span class="s2">&quot;from_real&quot;</span><span class="p">:</span> <span class="n">denoised_image_real_part</span><span class="p">,</span>
+                                         <span class="s2">&quot;from_imaginary&quot;</span><span class="p">:</span> <span class="n">denoised_image_imaginary_part</span>
+                                         <span class="p">}</span>
+                            <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">despeckled_image</span></div>
+
+
+<div class="viewcode-block" id="MerlinDenoiser.denoise_images">
+<a class="viewcode-back" href="../../../modules.html#deepdespeckling.merlin.merlin_denoiser.MerlinDenoiser.denoise_images">[docs]</a>
+    <span class="k">def</span> <span class="nf">denoise_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_to_denoise_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                       <span class="n">stride_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over a directory of coSAR images and store the denoised images in a directory</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            images_to_denoise_path (list): a list of paths of npy images to denoise</span>
+<span class="sd">            save_dir (str): repository to save sar images, real images and noisy images</span>
+<span class="sd">            patch_size (int): size of the patch of the convolution</span>
+<span class="sd">            stride_size (int): number of pixels between one convolution to the next</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">images_to_denoise_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="p">((</span><span class="n">images_to_denoise_path</span> <span class="o">+</span> <span class="s1">&#39;/*.npy&#39;</span><span class="p">))</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">images_to_denoise_paths</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;No data!&#39;</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting denoising images in </span><span class="si">{</span><span class="n">images_to_denoise_paths</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images_to_denoise_paths</span><span class="p">)):</span>
+            <span class="n">image_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">images_to_denoise_paths</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Despeckling </span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">noisy_image_idx</span> <span class="o">=</span> <span class="n">load_sar_image</span><span class="p">(</span>
+                <span class="n">images_to_denoise_paths</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">despeckled_images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">denoise_image</span><span class="p">(</span>
+                <span class="n">noisy_image_idx</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">,</span> <span class="n">stride_size</span><span class="p">)</span>
+
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Saving despeckled images in </span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_despeckled_images</span><span class="p">(</span>
+                <span class="n">despeckled_images</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hadrien Mariaccia, Emanuele Delsasso.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
