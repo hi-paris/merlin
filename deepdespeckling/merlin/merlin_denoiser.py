@@ -165,9 +165,9 @@ class MerlinDenoiser(Denoiser):
             processed denoised full image, processed denoised image real part, processed denoised image imaginary part
         """
         denoised_image_real_part = denormalize_sar_image(
-            denoised_image_real_part / count_image)
+            denoised_image_real_part / count_image, self.M, self.m)
         denoised_image_imaginary_part = denormalize_sar_image(
-            denoised_image_imaginary_part / count_image)
+            denoised_image_imaginary_part / count_image, self.M, self.m)
 
         # combine the two estimation
         output_clean_image = 0.5 * (np.square(
