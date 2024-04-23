@@ -131,9 +131,9 @@ Noisy cropped image                     |           Denoised cropped image
 :-----------------------------------------------------------:|:------------------------------------------:
  <img src="img/crop/noisy_test_image_data.png" width="100%"> | <img src="img/crop/denoised_test_image_data.png" width="1000%">
 
-## Inference with SAR2SAR
+## Inference with SAR2SAR for Sentinel-1 Ground Range Detected (GRD) images
 
-To despeckle SAR images using SAR2SAR, images need to be in `.tiff` or `.npy` format.
+To despeckle Sentinel-1 GRD SAR images using SAR2SAR, images need to be in `.tiff` or `.npy` format.
 
 
 ### Despeckle one image with SAR2SAR
