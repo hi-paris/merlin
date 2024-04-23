@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 
 setup(
-    author="Emanuele Dalsasso, Youcef Kemiche, Pierre Blanchard, Hadrien Mariaccia",
+    author="Emanuele Dalsasso, Hadrien Mariaccia, Youcef Kemiche, Pierre Blanchard",
     author_email='engineer@hi-paris.fr',
     python_requires='>=3.6',
     classifiers=[
@@ -40,6 +40,6 @@ setup(
     name='deepdespeckling',
     packages=find_packages(include=['deepdespeckling', 'deepdespeckling.*']),
     url='https://github.com/hi-paris/deepdespeckling',
-    version='0.7',
+    version='0.8',
     zip_safe=False,
 )

@@ -22,11 +22,13 @@ def normalize_sar_image(image: np.array) -> np.array:
     return ((np.log(np.clip(image, 0, image.max())+1e-6)-m)/(M-m)).astype(np.float32)
 
 
-def denormalize_sar_image(image: np.array) -> np.array:
+def denormalize_sar_image(image: np.array, M: float = M, m: float = m) -> np.array:
     """Denormalize a sar image store in  a numpy array
 
     Args:
         image (numpy array): a sar image
+        M (float): global maximum used for normalisation
+        m (float): global minimum used for normalisation
 
     Raises:
         TypeError: raise an error if the image file is not a numpy array
